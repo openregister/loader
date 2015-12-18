@@ -1,4 +1,17 @@
-group 'mint'
+apply plugin: 'java'
+apply plugin: 'idea'
+apply from: 'external-dependencies.gradle'
+apply from: 'idea-config.gradle'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6'
+}
+
+group 'loader'
+
+repositories {
+    mavenCentral()
+}
 
 //noinspection GroovyAssignabilityCheck
 dependencies {

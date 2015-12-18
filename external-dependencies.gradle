@@ -1,0 +1,20 @@
+ext {
+    jcabi = [
+            'com.sun.jersey:jersey-core:1.19',
+            'com.sun.jersey:jersey-client:1.19',
+            'javax.json:javax.json-api:1.0',
+            'org.glassfish:javax.json:1.0.4',
+            'com.jcabi:jcabi-http:1.11'
+    ]
+
+    jackson_csv = 'com.fasterxml.jackson:jackson-dataformat-csv:0.5.0'
+
+    jackson_dataformat_yaml = 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.5.4'
+
+    guava = 'com.google.guava:guava:18.0'
+
+    //test-dependencies
+
+    junit = 'junit:junit:4.12'
+    mockito = 'org.mockito:mockito-core:1.9.5'
+}
