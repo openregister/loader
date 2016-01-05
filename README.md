@@ -3,6 +3,13 @@ Loads data from jsonl, tsv, csv or yaml sources in to a register.
 
 [![Build Status](https://travis-ci.org/openregister/loader.svg?branch=master)](https://travis-ci.org/openregister/loader)
 
+Source files must contain the data in the format explained below:
+
+- jsonl: The file must contains a json entry per line
+- yaml: The file contents are parsed as one register entry
+- csv: The file must contain first line as header which explains the register fields and then subsequent one line per entry
+- tsv: The file must contain first line as header which explains the register fields and then subsequent one line per entry
+
 # Requirements
 
 - Java 1.8+
