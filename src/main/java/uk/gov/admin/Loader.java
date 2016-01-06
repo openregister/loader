@@ -36,12 +36,16 @@ class Loader {
                 .set(String.join("\n", batch))
                 .back()
                 .fetch();
-        if (response.status() != 200) {
+        if (isSuccess(response.status())) {
             throw new RuntimeException("Exception while loading entries: statusCode -> " + response.status() + "\n" +
                     " entity -> " + response.body());
         }
         entryCount += batch.size();
 
         System.out.println("Loaded " + entryCount + " entries...");
+    }
+
+    private boolean isSuccess(int statusCode) {
+        return javax.ws.rs.core.Response.Status.fromStatusCode(statusCode).getFamily() == javax.ws.rs.core.Response.Status.Family.SUCCESSFUL;
     }
 }
