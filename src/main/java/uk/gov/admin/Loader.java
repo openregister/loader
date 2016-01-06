@@ -5,9 +5,12 @@ import com.jcabi.http.Request;
 import com.jcabi.http.Response;
 import com.jcabi.http.request.JdkRequest;
 
+import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+
+import static javax.ws.rs.core.Response.Status.Family.SUCCESSFUL;
 
 class Loader {
 
@@ -46,6 +49,6 @@ class Loader {
     }
 
     private boolean isSuccess(int statusCode) {
-        return javax.ws.rs.core.Response.Status.fromStatusCode(statusCode).getFamily() == javax.ws.rs.core.Response.Status.Family.SUCCESSFUL;
+        return Status.fromStatusCode(statusCode).getFamily() == SUCCESSFUL;
     }
 }
