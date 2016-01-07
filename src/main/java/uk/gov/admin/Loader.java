@@ -33,12 +33,8 @@ class Loader {
 
     private void send(List<String> batch) throws IOException {
 
-        Response response = new JdkRequest(mintUrl)
-                .method(Request.POST)
-                .body()
-                .set(String.join("\n", batch))
-                .back()
-                .fetch();
+        Response response = makeRestCallToLoadEntryBatch(batch);
+
         if (!isSuccess(response.status())) {
             throw new RuntimeException("Exception while loading entries: statusCode -> " + response.status() + "\n" +
                     " entity -> " + response.body());
@@ -46,6 +42,15 @@ class Loader {
         entryCount += batch.size();
 
         System.out.println("Loaded " + entryCount + " entries...");
+    }
+
+    protected Response makeRestCallToLoadEntryBatch(List<String> batch) throws IOException {
+        return new JdkRequest(mintUrl)
+                .method(Request.POST)
+                .body()
+                .set(String.join("\n", batch))
+                .back()
+                .fetch();
     }
 
     private boolean isSuccess(int statusCode) {
