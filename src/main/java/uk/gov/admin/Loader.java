@@ -39,7 +39,7 @@ class Loader {
                 .set(String.join("\n", batch))
                 .back()
                 .fetch();
-        if (isSuccess(response.status())) {
+        if (!isSuccess(response.status())) {
             throw new RuntimeException("Exception while loading entries: statusCode -> " + response.status() + "\n" +
                     " entity -> " + response.body());
         }
