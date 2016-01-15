@@ -13,7 +13,6 @@ import java.util.List;
 import static javax.ws.rs.core.Response.Status.Family.SUCCESSFUL;
 
 class Loader {
-
     private static final int BATCH_SIZE = 10;
 
     private final String mintUrl;
