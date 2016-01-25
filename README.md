@@ -3,10 +3,11 @@ Loads data from jsonl, tsv, csv or yaml sources in to a register.
 
 [![Build Status](https://travis-ci.org/openregister/loader.svg?branch=master)](https://travis-ci.org/openregister/loader)
 
-Source files must contain the data in the format explained below:
+Source must contain the data in the format explained below:
 
-- jsonl: The file must contains a json entry per line
-- yaml: The file contents are parsed as one register entry
+- jsonl: The source path must be a file which contains a json entry per line
+- yaml: The source path must be the file whose contents are parsed as one register entry
+- yaml_dir: The source path must be the path of a directory which contains yaml files where every yaml file is parsed as one register entry
 - csv: The file must contain first line as header which explains the register fields and then subsequent one line per entry
 - tsv: The file must contain first line as header which explains the register fields and then subsequent one line per entry
 
@@ -24,8 +25,8 @@ Source files must contain the data in the format explained below:
 There are 2 options:
 
 1. Run via gradle:
--     `gradle bulkLoad -PmintUrl=<mint-url> -Pdatafile=<data-file-path> [-Ptype=jsonl|tsv|csv|yaml]`
-        e.g. gradle bulkLoad -PmintUrl=http://localhost:4567/load -Pdatafile=datafile.tsv -Ptype=tsv
+-     `./gradlew bulkLoad -Pminturl=<mint-url> -Pdatasource=<data-file-path> [-Ptype=jsonl|tsv|csv|yaml|yaml_dir]`
+        e.g. ./gradlew bulkLoad -Pminturl=http://localhost:4567/load -Pdatasource=datafile.tsv -Ptype=tsv
 2. Run using the built jar
--     `java -jar <path-to-jar> --mintUrl=<mint-url> --datafile=<data-file-path> --type=<jsonl|tsv|csv|yaml>`
-        e.g. java -jar loader.jar --mintUrl=http://localhost:4567/load --datafile=datafile.tsv --type=tsv
+-     `java -jar <path-to-jar> --minturl=<mint-url> --datasource=<data-file-path> --type=<jsonl|tsv|csv|yaml|yaml_dir>`
+        e.g. java -jar loader.jar --minturl=http://localhost:4567/load --datasource=datafile.tsv --type=tsv

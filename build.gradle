@@ -42,20 +42,20 @@ jar {
 
 task bulkLoad(type: JavaExec) {
     def properties = project.getProperties()
-    def datafile = properties.get("datafile")
-    def mintUrl = properties.get("mintUrl")
+    def dataSource = properties.get("datasource")
+    def mintUrl = properties.get("minturl")
     def type = properties.get("type") == null ? "jsonl" : properties.get("type")
 
     main = 'uk.gov.admin.LoaderApplication'
     classpath = sourceSets.main.runtimeClasspath
-    args = ["--datafile=$datafile", "--mintUrl=$mintUrl", "--type=$type"]
+    args = ["--datasource=$dataSource", "--minturl=$mintUrl", "--type=$type"]
     workingDir = System.getProperty("user.dir") // run the task from the user's cwd
 
     doFirst{
-        if (datafile == null || mintUrl == null) {
-            throw new AssertionError("Missing required parameters -Pdatafile and -PmintUrl.\n\nUsage: gradle bulkLoad -PmintUrl=<mintUrl> -Pdatafile=<loadfile.json> [-Ptype=jsonl|tsv|csv|yaml]")
+        if (dataSource == null || mintUrl == null) {
+            throw new AssertionError("Missing required parameters -Pdatasource and -Pminturl.\n\nUsage: gradle bulkLoad -Pminturl=<minturl> -Pdatasource=<loadfile.json> [-Ptype=jsonl|tsv|csv|yaml|yaml_dir]")
         }
-        if(!["jsonl", "tsv", "csv", "yaml"].contains(type)){
+        if(!["jsonl", "tsv", "csv", "yaml", "yaml_dir"].contains(type)){
             throw new IllegalArgumentException("type: $type is not a valid.")
         }
     }

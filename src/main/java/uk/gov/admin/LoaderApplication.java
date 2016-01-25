@@ -8,10 +8,9 @@ public class LoaderApplication {
     public static void main(String[] args) throws Exception {
         Map<String, String> argsMap = createArgumentsMap(args);
 
-        String dataFile = argsMap.get("--datafile");
-        String mintUrl = argsMap.get("--mintUrl");
+        String dataFile = argsMap.get("--datasource");
+        String mintUrl = argsMap.get("--minturl");
         String type = argsMap.get("--type");
-
 
         DataFileReader dataFileReader = new DataFileReader(dataFile, type);
 
@@ -26,7 +25,7 @@ public class LoaderApplication {
                     .map(a -> a.split("="))
                     .collect(Collectors.toMap(argEntry -> argEntry[0], argEntry -> argEntry[1]));
 
-            if (argsMap.containsKey("--datafile") && argsMap.containsKey("--mintUrl") && argsMap.containsKey("--type")) {
+            if (argsMap.containsKey("--datasource") && argsMap.containsKey("--minturl") && argsMap.containsKey("--type")) {
                 return argsMap;
             }
 
@@ -40,7 +39,7 @@ public class LoaderApplication {
     }
 
     private static Exception printUsageException() throws Exception {
-        return new RuntimeException("Usage: java LoaderApplication --mintUrl=<mint-load-url> --datafile=<loadfile.json> --type=<jsonl|tsv|csv>");
+        return new RuntimeException("Usage: java LoaderApplication --minturl=<mint-load-url> --datasource=<loadfile.json> --type=<jsonl|tsv|csv|yaml|yaml_dir>");
     }
 
 }
