@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.collect.Iterators;
-import org.codehaus.jackson.map.MappingIterator;
+import com.fasterxml.jackson.databind.MappingIterator;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -47,7 +47,7 @@ public class DataFileReader {
                 .build();
 
         MappingIterator<String> mappingIterator = new CsvMapper().reader(Map.class)
-                .withSchema(schema)
+                .with(schema)
                 .readValues(reader());
 
         return new CsvEntriesIterator(mappingIterator);

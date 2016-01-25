@@ -1,7 +1,7 @@
 package uk.gov.admin;
 
-import org.codehaus.jackson.map.MappingIterator;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.Iterator;
