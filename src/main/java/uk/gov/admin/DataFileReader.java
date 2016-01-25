@@ -52,7 +52,6 @@ public class DataFileReader {
         return Stream.of(Iterators.toArray(filesIterator, Path.class))
                 .filter(path -> path.toString().endsWith(".yaml"))
                 .map(this::convertToJsonEntry)
-                .collect(Collectors.toList())
                 .iterator();
     }
 
