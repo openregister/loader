@@ -10,7 +10,7 @@ public class EmptyFieldPruner {
         Iterator<Map.Entry<String, JsonNode>> it = node.fields();
         while (it.hasNext()) {
             Map.Entry<String, JsonNode> keyValue = it.next();
-            if (keyValue.getValue().isValueNode()) {
+            if (keyValue.getValue().isTextual() && keyValue.getValue().isValueNode()) {
                 if (keyValue.getValue().textValue().isEmpty()) {
                     it.remove();
                 }
