@@ -20,6 +20,11 @@ dependencies {
     testCompile junit, mockito
 }
 
+test {
+    afterTest { desc, result ->
+        println "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+    }
+}
 
 jar.baseName = "loader"
 
