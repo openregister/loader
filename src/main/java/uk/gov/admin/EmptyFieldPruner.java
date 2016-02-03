@@ -7,16 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class EmptyFieldPruner {
-    Predicate<Map.Entry> keyHasNonEmptyValue = new Predicate<Map.Entry>() {
-        public boolean apply(Map.Entry i) {
-            if (i == null) {
-                return false;
-            } else if(i.getValue() instanceof String && ((String) i.getValue()).isEmpty()) {
-                return false;
-            }
-            return true;
+class EmptyFieldPruner {
+    private final Predicate<Map.Entry> keyHasNonEmptyValue = i -> {
+        if (i == null) {
+            return false;
+        } else if (i.getValue() instanceof String && ((String) i.getValue()).isEmpty()) {
+            return false;
         }
+        return true;
     };
 
     public Map removeKeysWithEmptyValues(Map input) {

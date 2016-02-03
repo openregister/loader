@@ -22,7 +22,7 @@ public class EmptyFieldPrunerTest {
 
     @Test
     public void multipleEmptyValues_removesKeys() {
-        Map<String, String> testData = new HashMap();
+        Map<String, String> testData = new HashMap<>();
         testData.put("k1", "v1");
         testData.put("k2", "");
         testData.put("k3", "v3");

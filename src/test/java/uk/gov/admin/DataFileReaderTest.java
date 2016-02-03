@@ -15,13 +15,13 @@ import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("ConstantConditions")
 public class DataFileReaderTest {
-    String testData = "{\"address\":\"0000001\",\"postcode\":\"01010101\"}";
-    List<Map> expectedData;
+    private List<Map> expectedData;
 
     Path testFilePath;
 
     @Before
     public void setUp() throws Exception {
+        final String testData = "{\"address\":\"0000001\",\"postcode\":\"01010101\"}";
         expectedData = Collections.singletonList(new ObjectMapper().readValue(testData, Map.class));
 
         testFilePath = Files.createTempFile("test-load", "");
