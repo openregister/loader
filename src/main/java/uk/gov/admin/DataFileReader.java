@@ -5,7 +5,6 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.collect.Iterators;
-import com.fasterxml.jackson.databind.MappingIterator;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,7 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DataFileReader {
@@ -32,14 +30,14 @@ public class DataFileReader {
         this.dataSourceURI = createDataUri(dataSource);
     }
 
-    public Iterator<String> getFileEntriesIterator() throws IOException {
+    public Iterator<Map> getFileEntriesIterator() throws IOException {
         switch (type) {
             case "yaml_dir":
                 return readYamlFiles();
             case "yaml":
                 return Iterators.forArray(convertToJsonEntry(Paths.get(dataSourceURI)));
             case "jsonl":
-                return reader().lines().iterator();
+                return reader().lines().map(this::convertToMap).iterator();
             case "csv":
                 return csvIterator(',');
             default:
@@ -47,7 +45,15 @@ public class DataFileReader {
         }
     }
 
-    private Iterator<String> readYamlFiles() throws IOException {
+    private Map convertToMap(String input) {
+        try {
+            return yamlObjectMapper.readValue(input, Map.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Iterator<Map> readYamlFiles() throws IOException {
         Iterator<Path> filesIterator = Files.newDirectoryStream(Paths.get(dataSourceURI)).iterator();
         return Stream.of(Iterators.toArray(filesIterator, Path.class))
                 .filter(path -> path.toString().endsWith(".yaml"))
@@ -55,25 +61,23 @@ public class DataFileReader {
                 .iterator();
     }
 
-    private String convertToJsonEntry(Path path) {
+    private Map convertToJsonEntry(Path path) {
         try {
-            return yamlObjectMapper.readTree(path.toFile().toURI().toURL().openStream()).toString();
+            return yamlObjectMapper.readValue(path.toFile().toURI().toURL().openStream(), Map.class);
         } catch (IOException e) {
             throw new RuntimeException("Error reading yaml file " + path.toString(), e);
         }
     }
 
-    private Iterator<String> csvIterator(char separator) throws IOException {
+    private Iterator<Map> csvIterator(char separator) throws IOException {
         CsvSchema schema = CsvSchema.builder()
                 .setColumnSeparator(separator)
                 .setUseHeader(true)
                 .build();
 
-        MappingIterator<String> mappingIterator = new CsvMapper().reader(Map.class)
+        return new CsvMapper().reader(Map.class)
                 .with(schema)
                 .readValues(reader());
-
-        return new CsvEntriesIterator(mappingIterator);
     }
 
     private BufferedReader reader() {

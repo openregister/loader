@@ -20,7 +20,6 @@ dependencies {
     testCompile junit, mockito
 }
 
-
 jar.baseName = "loader"
 
 jar {
@@ -51,12 +50,19 @@ task bulkLoad(type: JavaExec) {
     args = ["--datasource=$dataSource", "--minturl=$mintUrl", "--type=$type"]
     workingDir = System.getProperty("user.dir") // run the task from the user's cwd
 
-    doFirst{
+    doFirst {
         if (dataSource == null || mintUrl == null) {
             throw new AssertionError("Missing required parameters -Pdatasource and -Pminturl.\n\nUsage: gradle bulkLoad -Pminturl=<minturl> -Pdatasource=<loadfile.json> [-Ptype=jsonl|tsv|csv|yaml|yaml_dir]")
         }
-        if(!["jsonl", "tsv", "csv", "yaml", "yaml_dir"].contains(type)){
+        if (!["jsonl", "tsv", "csv", "yaml", "yaml_dir"].contains(type)) {
             throw new IllegalArgumentException("type: $type is not a valid.")
         }
     }
 }
+
+test {
+    afterTest { desc, result ->
+        println "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+    }
+}
+

@@ -1,5 +1,6 @@
 package uk.gov.admin;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,21 +9,21 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("ConstantConditions")
 public class DataFileReaderTest {
-    List<String> expectedData = Collections.singletonList("{\"address\":\"0000001\",\"postcode\":\"01010101\"}");
+    String testData = "{\"address\":\"0000001\",\"postcode\":\"01010101\"}";
+    List<Map> expectedData;
 
     Path testFilePath;
 
     @Before
     public void setUp() throws Exception {
+        expectedData = Collections.singletonList(new ObjectMapper().readValue(testData, Map.class));
+
         testFilePath = Files.createTempFile("test-load", "");
     }
 
@@ -35,9 +36,11 @@ public class DataFileReaderTest {
     public void should_be_able_to_read_local_file_contains_json_entries() throws IOException, URISyntaxException {
         Files.write(testFilePath, "{\"address\":\"0000001\",\"postcode\":\"01010101\"}".getBytes());
 
-        Iterator<String> entriesIterator = new DataFileReader(testFilePath.toString(), "jsonl").getFileEntriesIterator();
+        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "jsonl").getFileEntriesIterator();
 
-        assertEquals(expectedData, listFrom(entriesIterator));
+        List<Map> response = mapFrom(entriesIterator);
+
+        assertEquals(expectedData, response);
     }
 
     @Test
@@ -45,25 +48,23 @@ public class DataFileReaderTest {
 
         Files.write(testFilePath, "address,postcode\n0000001,01010101".getBytes());
 
-        Iterator<String> entriesIterator = new DataFileReader(testFilePath.toString(), "csv").getFileEntriesIterator();
+        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "csv").getFileEntriesIterator();
 
-        assertEquals(expectedData, listFrom(entriesIterator));
+        assertEquals(expectedData, mapFrom(entriesIterator));
     }
 
     @Test
     public void should_be_able_to_read_local_file_contains_tsv_entries() throws IOException, URISyntaxException {
-
-
         Files.write(testFilePath, "address\tpostcode\n0000001\t01010101".getBytes());
 
-        Iterator<String> entriesIterator = new DataFileReader(testFilePath.toString(), "tsv").getFileEntriesIterator();
+        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "tsv").getFileEntriesIterator();
 
-        assertEquals(expectedData, listFrom(entriesIterator));
+        assertEquals(expectedData, mapFrom(entriesIterator));
     }
 
 
-    protected List<String> listFrom(Iterator<String> entriesIterator) {
-        List<String> data = new ArrayList<>();
+    protected List<Map> mapFrom(Iterator<Map> entriesIterator) {
+        List<Map> data = new ArrayList<>();
 
         while (entriesIterator.hasNext()) {
             data.add(entriesIterator.next());
