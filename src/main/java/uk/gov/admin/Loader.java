@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.jcabi.http.Request;
 import com.jcabi.http.Response;
 import com.jcabi.http.request.JdkRequest;
+import com.jcabi.http.wire.BasicAuthWire;
 
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
@@ -45,6 +46,7 @@ class Loader {
 
     protected Response makeRestCallToLoadEntryBatch(List<String> batch) throws IOException {
         return new JdkRequest(mintUrl)
+                .through(BasicAuthWire.class)
                 .method(Request.POST)
                 .body()
                 .set(String.join("\n", batch))
