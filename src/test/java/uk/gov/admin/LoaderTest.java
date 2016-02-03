@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -33,7 +34,7 @@ public class LoaderTest {
         when(mockResponse.status()).thenReturn(400);
         when(mockResponse.body()).thenReturn("body");
 
-        List<String> entries = Collections.singletonList("entry1");
+        List<Map> entries = Collections.singletonList(Collections.singletonMap("entry1", "value1"));
         try {
             loader.load(entries.iterator());
             fail("must not reach here");
@@ -55,7 +56,7 @@ public class LoaderTest {
             when(mockResponse.status()).thenReturn(statusCode);
             when(mockResponse.body()).thenReturn("body");
 
-            List<String> entries = Collections.singletonList("entry1");
+            List<Map> entries = Collections.singletonList(Collections.singletonMap("entry1", "value1"));
             try {
                 loader.load(entries.iterator());
             } catch (IOException e) {

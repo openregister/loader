@@ -1,5 +1,7 @@
 package uk.gov.admin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 import com.jcabi.http.Request;
 import com.jcabi.http.Response;
@@ -10,6 +12,8 @@ import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.Response.Status.Family.SUCCESSFUL;
 
@@ -23,17 +27,20 @@ class Loader {
         this.mintUrl = mintUrl;
     }
 
-    public void load(Iterator<String> fileEntries) throws IOException {
-        Iterable<List<String>> entryBatches = Iterables.partition(() -> fileEntries, BATCH_SIZE);
+    public void load(Iterator<Map> fileEntries) throws IOException {
+        Iterable<List<Map>> entryBatches = Iterables.partition(() -> fileEntries, BATCH_SIZE);
 
-        for (List<String> entryBatch : entryBatches) {
+        for (List<Map> entryBatch : entryBatches) {
             send(entryBatch);
         }
     }
 
-    private void send(List<String> batch) throws IOException {
-
-        Response response = makeRestCallToLoadEntryBatch(batch);
+    private void send(List<Map> batch) throws IOException {
+        Response response = makeRestCallToLoadEntryBatch(
+                new EmptyFieldPruner().removeKeysWithEmptyValues(batch)
+                        .stream()
+                        .map(this::convertToString)
+                        .collect(Collectors.toList()));
 
         if (!isSuccess(response.status())) {
             throw new RuntimeException("Exception while loading entries: statusCode -> " + response.status() + "\n" +
@@ -42,6 +49,15 @@ class Loader {
         entryCount += batch.size();
 
         System.out.println("Loaded " + entryCount + " entries...");
+    }
+
+
+    private String convertToString(Map input) {
+        try {
+            return new ObjectMapper().writeValueAsString(input);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected Response makeRestCallToLoadEntryBatch(List<String> batch) throws IOException {
