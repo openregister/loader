@@ -8,7 +8,11 @@ services:
 - docker
 
 env:
-  REPO: slawekm/openregister-loader
+
+env:
+  global:
+    - COMMIT=${TRAVIS_COMMIT::8}
+    - REPO=openregister/loader
 
 cache:
   directories:
@@ -17,8 +21,6 @@ cache:
 
 script:
 - ./gradlew clean build
-
-after_success:
 - docker build -t $REPO:$COMMIT .
 - docker tag $REPO:$COMMIT $REPO:$TRAVIS_BRANCH
 - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
