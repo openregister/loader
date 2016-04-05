@@ -4,8 +4,8 @@ language: java
 jdk:
 - oraclejdk8
 
-services:
-- docker
+#services:
+#- docker
 
 env:
   REPO: slawekm/openregister-loader
@@ -18,9 +18,9 @@ cache:
 script:
 - ./gradlew clean build
 
-after_success:
-- docker build -f Dockerfile -t $REPO:$COMMIT .
-- docker tag $REPO:$COMMIT $REPO:$TRAVIS_BRANCH
-- docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
-- docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-- docker push $REPO
+#after_success:
+#- docker build -t $REPO:$COMMIT .
+#- docker tag $REPO:$COMMIT $REPO:$TRAVIS_BRANCH
+#- docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+#- docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+#- docker push $REPO
