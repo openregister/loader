@@ -19,6 +19,7 @@ cache:
 
 script:
 - ./gradlew clean build
+- docker version
 - docker build -t $REPOSITORY:$COMMIT .
 - docker tag $REPOSITORY:$COMMIT $REPOSITORY:$TRAVIS_BRANCH
 - docker tag $REPOSITORY:$COMMIT $REPOSITORY:travis-$TRAVIS_BUILD_NUMBER
