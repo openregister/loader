@@ -1,4 +1,4 @@
-sudo: required
+sudo: false
 language: java
 jdk:
 - oraclejdk8
@@ -9,6 +9,6 @@ cache:
   - $HOME/.gradle/caches
   - $HOME/.gradle/wrapper
 before_install:
-- docker build -t openregister/loader .
 script:
 - ./gradlew clean build
+- docker build -t openregister/loader .
