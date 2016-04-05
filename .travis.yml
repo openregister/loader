@@ -8,11 +8,9 @@ services:
 - docker
 
 env:
-
-env:
   global:
     - COMMIT=${TRAVIS_COMMIT::8}
-    - REPO=openregister/loader
+    - REPOSITORY=openregister/loader
 
 cache:
   directories:
@@ -21,8 +19,8 @@ cache:
 
 script:
 - ./gradlew clean build
-- docker build -t $REPO:$COMMIT .
-- docker tag $REPO:$COMMIT $REPO:$TRAVIS_BRANCH
-- docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+- docker build -t $REPOSITORY:$COMMIT .
+- docker tag $REPOSITORY:$COMMIT $REPOSITORY:$TRAVIS_BRANCH
+- docker tag $REPOSITORY:$COMMIT $REPOSITORY:travis-$TRAVIS_BUILD_NUMBER
 - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-- docker push $REPO
+- docker push $REPOSITORY
