@@ -10,7 +10,7 @@ services:
 env:
   global:
     - COMMIT=${TRAVIS_COMMIT::8}
-    - REPOSITORY=openregister/loader
+    - REPOSITORY=slawekm/openregister-loader
 
 cache:
   directories:
