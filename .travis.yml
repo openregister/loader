@@ -19,7 +19,9 @@ cache:
 
 script:
 - ./gradlew clean build
+- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
 - echo $COMMIT
 - docker build -t $REPOSITORY:$COMMIT .
+- docker tag $REPO:$COMMIT $REPO:$TAG
 - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 - docker push $REPOSITORY
