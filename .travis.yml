@@ -9,7 +9,7 @@ services:
 
 env:
   global:
-    - COMMIT=${TRAVIS_COMMIT::8}
+    - COMMIT=${TRAVIS_COMMIT::7}
     - REPOSITORY=slawekm/openregister-loader
 
 cache:
@@ -21,7 +21,6 @@ script:
 - ./gradlew clean build
 - echo $COMMIT
 - docker build -t $REPOSITORY:$COMMIT .
-- docker tag $REPOSITORY:$COMMIT $REPOSITORY:$TRAVIS_BRANCH
 - docker tag $REPOSITORY:$COMMIT $REPOSITORY:travis-$TRAVIS_BUILD_NUMBER
 - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 - docker push $REPOSITORY
