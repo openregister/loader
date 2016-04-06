@@ -22,6 +22,6 @@ script:
 - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
 - echo $COMMIT
 - docker build -t $REPOSITORY:$COMMIT .
-- docker tag $REPOSITORY:$COMMIT $REPO:$TAG
+- docker tag $REPOSITORY:$COMMIT $REPOSITORY:$TAG
 - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 - docker push $REPOSITORY
