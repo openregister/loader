@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import static javax.ws.rs.core.Response.Status.Family.SUCCESSFUL;
 
 class Loader {
-    private static final int BATCH_SIZE = 10;
+    private static final int BATCH_SIZE = 1000;
 
     private final String mintUrl;
     private long entryCount = 0;
