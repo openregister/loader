@@ -8,6 +8,7 @@ import com.jcabi.http.Response;
 import com.jcabi.http.request.JdkRequest;
 import com.jcabi.http.wire.BasicAuthWire;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.util.Iterator;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static javax.ws.rs.core.Response.Status.Family.SUCCESSFUL;
 
 class Loader {
@@ -63,6 +65,7 @@ class Loader {
     protected Response makeRestCallToLoadEntryBatch(List<String> batch) throws IOException {
         return new JdkRequest(mintUrl)
                 .through(BasicAuthWire.class)
+                .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .method(Request.POST)
                 .body()
                 .set(String.join("\n", batch))
