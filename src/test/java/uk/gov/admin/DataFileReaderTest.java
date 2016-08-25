@@ -15,6 +15,8 @@ import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("ConstantConditions")
 public class DataFileReaderTest {
+
+    public static final Optional<String> FIELDS_JSON = Optional.of("file:src/test/resources/fields.json");
     private List<Map> expectedData;
 
     Path testFilePath;
@@ -36,7 +38,7 @@ public class DataFileReaderTest {
     public void should_be_able_to_read_local_file_contains_json_entries() throws IOException, URISyntaxException {
         Files.write(testFilePath, "{\"address\":\"0000001\",\"postcode\":\"01010101\"}".getBytes());
 
-        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "jsonl").getFileEntriesIterator();
+        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "jsonl", Optional.empty()).getFileEntriesIterator();
 
         List<Map> response = mapFrom(entriesIterator);
 
@@ -48,7 +50,7 @@ public class DataFileReaderTest {
 
         Files.write(testFilePath, "address,postcode\n0000001,01010101".getBytes());
 
-        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "csv").getFileEntriesIterator();
+        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "csv", Optional.empty()).getFileEntriesIterator();
 
         assertEquals(expectedData, mapFrom(entriesIterator));
     }
@@ -57,11 +59,25 @@ public class DataFileReaderTest {
     public void should_be_able_to_read_local_file_contains_tsv_entries() throws IOException, URISyntaxException {
         Files.write(testFilePath, "address\tpostcode\n0000001\t01010101".getBytes());
 
-        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "tsv").getFileEntriesIterator();
+        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "tsv", Optional.empty()).getFileEntriesIterator();
 
         assertEquals(expectedData, mapFrom(entriesIterator));
     }
 
+    @Test
+    public void should_read_cardinality_n_field_as_array() throws Exception {
+
+        Iterator<Map> entriesIterator = new DataFileReader("src/test/resources/tsv-semi-colon.tsv", "tsv", FIELDS_JSON).getFileEntriesIterator();
+
+        String json0 = new ObjectMapper().writeValueAsString(entriesIterator.next());
+
+        assertEquals("{\"food-premises\":\"123\",\"food-premises-types\":[\"Restaurant\",\"Cafe\",\"Canteen\"]}", json0);
+
+        String json1 = new ObjectMapper().writeValueAsString(entriesIterator.next());
+
+        assertEquals("{\"food-premises\":\"456\",\"food-premises-types\":[\"Cafe\"]}", json1);
+
+    }
 
     protected List<Map> mapFrom(Iterator<Map> entriesIterator) {
         List<Map> data = new ArrayList<>();

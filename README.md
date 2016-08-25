@@ -22,11 +22,13 @@ Source must contain the data in the format explained below:
 
 # Bulk load data from CLI
 
+When reading data from a _tsv_ file where fields have cardinality _n_, an optional URL for fields data can be passed. The URL may point to a local file or the location of the fields register for the relevant environment e.g. http://field.discovery.openregister.org/records.json 
+
 There are 2 options:
 
 1. Run via gradle:
 -     `./gradlew bulkLoad -Pminturl=<mint-url> -Pdatasource=<data-file-path> [-Ptype=jsonl|tsv|csv|yaml|yaml_dir]`
-        e.g. ./gradlew bulkLoad -Pminturl=http://localhost:4567/load -Pdatasource=datafile.tsv -Ptype=tsv
+        e.g. ./gradlew bulkLoad -Pminturl=http://localhost:4567/load -Pdatasource=datafile.tsv -Ptype=tsv -Pfieldsurl=file:field-records.json
 2. Run using the built jar
 -     `java -jar <path-to-jar> --minturl=<mint-url> --datasource=<data-file-path> --type=<jsonl|tsv|csv|yaml|yaml_dir>`
-        e.g. java -jar loader.jar --minturl=http://localhost:4567/load --datasource=datafile.tsv --type=tsv
+        e.g. java -jar loader.jar --minturl=http://localhost:4567/load --datasource=datafile.tsv --type=tsv --fieldsurl=file:field-records.json
