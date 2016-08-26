@@ -79,6 +79,20 @@ public class DataFileReaderTest {
 
     }
 
+    @Test
+    public void should_read_name_containing_quote() throws Exception {
+
+        Iterator<Map> entriesIterator = new DataFileReader("src/test/resources/tsv-quote.tsv", "tsv", FIELDS_JSON).getFileEntriesIterator();
+
+        String json0 = new ObjectMapper().writeValueAsString(entriesIterator.next());
+
+        System.out.println(json0);
+
+        assertEquals("{\"food-premises\":\"123\",\"name\":\"\\\"go\\\" cafe\",\"food-premises-types\":[\"Cafe\"]}", json0);
+
+
+    }
+
     protected List<Map> mapFrom(Iterator<Map> entriesIterator) {
         List<Map> data = new ArrayList<>();
 

@@ -109,6 +109,8 @@ public class DataFileReader {
 
         CsvSchema schema = builder
                 .setColumnSeparator(separator)
+                .setEscapeChar('\\')
+                .setQuoteChar('\u2620') // obscure skull symbol
                 .build();
 
         return new CsvMapper().reader(Map.class)
