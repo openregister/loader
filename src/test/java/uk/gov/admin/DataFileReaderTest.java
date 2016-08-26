@@ -15,6 +15,8 @@ import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("ConstantConditions")
 public class DataFileReaderTest {
+
+    public static final Optional<String> FIELDS_JSON = Optional.of("file:src/test/resources/fields.json");
     private List<Map> expectedData;
 
     Path testFilePath;
@@ -62,6 +64,20 @@ public class DataFileReaderTest {
         assertEquals(expectedData, mapFrom(entriesIterator));
     }
 
+    @Test
+    public void should_read_cardinality_n_field_as_array() throws Exception {
+
+        Iterator<Map> entriesIterator = new DataFileReader("src/test/resources/tsv-semi-colon.tsv", "tsv", FIELDS_JSON).getFileEntriesIterator();
+
+        String json0 = new ObjectMapper().writeValueAsString(entriesIterator.next());
+
+        assertEquals("{\"food-premises\":\"123\",\"food-premises-types\":[\"Restaurant\",\"Cafe\",\"Canteen\"]}", json0);
+
+        String json1 = new ObjectMapper().writeValueAsString(entriesIterator.next());
+
+        assertEquals("{\"food-premises\":\"456\",\"food-premises-types\":[\"Cafe\"]}", json1);
+
+    }
 
     protected List<Map> mapFrom(Iterator<Map> entriesIterator) {
         List<Map> data = new ArrayList<>();

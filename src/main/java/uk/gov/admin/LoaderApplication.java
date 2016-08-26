@@ -1,6 +1,7 @@
 package uk.gov.admin;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -11,8 +12,9 @@ public class LoaderApplication {
         String dataFile = argsMap.get("--datasource");
         String mintUrl = argsMap.get("--minturl");
         String type = argsMap.get("--type");
+        Optional<String> fieldsUrl = Optional.ofNullable( argsMap.get("--fieldsurl") );
 
-        DataFileReader dataFileReader = new DataFileReader(dataFile, type);
+        DataFileReader dataFileReader = new DataFileReader(dataFile, type, fieldsUrl);
 
         new Loader(mintUrl).load(dataFileReader.getFileEntriesIterator());
 
@@ -39,7 +41,7 @@ public class LoaderApplication {
     }
 
     private static Exception printUsageException() throws Exception {
-        return new RuntimeException("Usage: java LoaderApplication --minturl=<mint-load-url> --datasource=<loadfile.json> --type=<jsonl|tsv|csv|yaml|yaml_dir>");
+        return new RuntimeException("Usage: java LoaderApplication --minturl=<mint-load-url> --datasource=<loadfile.json> --type=<jsonl|tsv|csv|yaml|yaml_dir> --fieldsurl=<fields-url>(optional)");
     }
 
 }

@@ -1,0 +1,34 @@
+{
+  "food-premises-types": {
+    "entry-number": "51",
+    "entry-timestamp": "2016-08-23T09:49:25Z",
+    "item-hash": "sha-256:d68b5f17afce03258139ee8fc8c92baec78002d7b3eb6acbfeaed7a5086fe5a5",
+    "text": "A set of food premises types.",
+    "field": "food-premises-types",
+    "phase": "discovery",
+    "datatype": "string",
+    "register": "food-premises-type",
+    "cardinality": "n"
+  },
+  "food-premises": {
+    "entry-number": "12",
+    "entry-timestamp": "2016-08-23T09:49:25Z",
+    "item-hash": "sha-256:131c40002047ceab7b70750dc834030e1be79097c14439d443a442e30da5ec12",
+    "text": "A premises which serves or processes food.",
+    "field": "food-premises",
+    "phase": "discovery",
+    "datatype": "string",
+    "register": "food-premises",
+    "cardinality": "1"
+  },
+  "name": {
+    "entry-number": "34",
+    "entry-timestamp": "2016-08-23T09:49:25Z",
+    "item-hash": "sha-256:64517509c4f60328c6b2ca95bdfede60d194e0907830c5bf7731c237e567a3c1",
+    "text": "English name for an entry",
+    "field": "name",
+    "phase": "beta",
+    "datatype": "string",
+    "cardinality": "1"
+  }
+}
