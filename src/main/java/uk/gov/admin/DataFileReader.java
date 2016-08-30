@@ -1,6 +1,5 @@
 package uk.gov.admin;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
@@ -8,7 +7,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.collect.Iterators;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -16,8 +14,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.lang.String.valueOf;
@@ -33,7 +33,11 @@ public class DataFileReader {
     public DataFileReader(String dataSource, String type, Optional<String> fieldsSource) throws URISyntaxException {
         this.type = type;
         this.dataSourceURI = createDataUri(dataSource);
-        cardinalities = fieldsSource.map(this::loadFieldCardinalities);
+        this.cardinalities = fieldsSource.map(this::loadFieldCardinalities);
+    }
+
+    public DataFileReader(String dataSource, String type) throws URISyntaxException {
+        this( dataSource,  type, Optional.empty());
     }
 
     public Iterator<Map> getFileEntriesIterator() throws IOException {

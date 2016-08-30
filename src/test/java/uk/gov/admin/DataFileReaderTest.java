@@ -38,7 +38,7 @@ public class DataFileReaderTest {
     public void should_be_able_to_read_local_file_contains_json_entries() throws IOException, URISyntaxException {
         Files.write(testFilePath, "{\"address\":\"0000001\",\"postcode\":\"01010101\"}".getBytes());
 
-        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "jsonl", Optional.empty()).getFileEntriesIterator();
+        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "jsonl").getFileEntriesIterator();
 
         List<Map> response = mapFrom(entriesIterator);
 
@@ -50,7 +50,7 @@ public class DataFileReaderTest {
 
         Files.write(testFilePath, "address,postcode\n0000001,01010101".getBytes());
 
-        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "csv", Optional.empty()).getFileEntriesIterator();
+        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "csv").getFileEntriesIterator();
 
         assertEquals(expectedData, mapFrom(entriesIterator));
     }
@@ -59,7 +59,7 @@ public class DataFileReaderTest {
     public void should_be_able_to_read_local_file_contains_tsv_entries() throws IOException, URISyntaxException {
         Files.write(testFilePath, "address\tpostcode\n0000001\t01010101".getBytes());
 
-        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "tsv", Optional.empty()).getFileEntriesIterator();
+        Iterator<Map> entriesIterator = new DataFileReader(testFilePath.toString(), "tsv").getFileEntriesIterator();
 
         assertEquals(expectedData, mapFrom(entriesIterator));
     }
