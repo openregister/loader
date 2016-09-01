@@ -37,7 +37,7 @@ public class DataFileReader {
     }
 
     public DataFileReader(String dataSource, String type) throws URISyntaxException {
-        this( dataSource,  type, Optional.empty());
+        this(dataSource, type, Optional.empty());
     }
 
     public Iterator<Map> getFileEntriesIterator() throws IOException {
@@ -111,11 +111,13 @@ public class DataFileReader {
             builder.setUseHeader(true);
         }
 
-        CsvSchema schema = builder
-                .setColumnSeparator(separator)
-                .setEscapeChar('\\')
-                .setQuoteChar('\u2620') // obscure skull symbol
-                .build();
+        builder.setColumnSeparator(separator).setAllowComments(true);
+
+        if (separator == '\t') {
+            builder.disableQuoteChar();
+        }
+
+        CsvSchema schema = builder.build();
 
         return new CsvMapper().reader(Map.class)
                 .with(schema)

@@ -1,0 +1,5 @@
+food-premises,name,food-premises-types
+1,"go, cafe",Cafe
+2,"""go"" cafe",Cafe
+3,the \ backslash,Cafe
+
