@@ -11,6 +11,8 @@ import com.jcabi.http.wire.BasicAuthWire;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,8 @@ class Loader {
     private final String mintUrl;
     private long entryCount = 0;
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
+
     public Loader(String mintUrl) {
         this.mintUrl = mintUrl;
     }
@@ -38,6 +42,7 @@ class Loader {
     }
 
     private void send(List<Map> batch) throws IOException {
+        long start = System.currentTimeMillis();
         Response response = makeRestCallToLoadEntryBatch(
                 new EmptyFieldPruner().removeKeysWithEmptyValues(batch)
                         .stream()
@@ -48,9 +53,12 @@ class Loader {
             throw new RuntimeException("Exception while loading entries: statusCode -> " + response.status() + "\n" +
                     " entity -> " + response.body());
         }
+        long end = System.currentTimeMillis();
         entryCount += batch.size();
 
-        System.out.println("Loaded " + entryCount + " entries...");
+        LocalDateTime date = LocalDateTime.now();
+        String time = date.format(formatter);
+        System.out.println(time + " loaded " + entryCount + " entries..." + " time: " + String.valueOf(end - start));
     }
 
 
