@@ -14,9 +14,13 @@ public class LoaderApplication {
         String type = argsMap.get("--type");
         Optional<String> fieldsUrl = Optional.ofNullable( argsMap.get("--fieldsurl") );
 
+        System.out.println(String.format("Loading to %s from %s", mintUrl, dataFile));
+
         DataFileReader dataFileReader = new DataFileReader(dataFile, type, fieldsUrl);
 
         new Loader(mintUrl).load(dataFileReader.getFileEntriesIterator());
+
+        System.out.println("Loading complete");
 
     }
 
