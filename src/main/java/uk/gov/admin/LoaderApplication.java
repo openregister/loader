@@ -6,21 +6,24 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LoaderApplication {
-    public static void main(String[] args) throws Exception {
-        Map<String, String> argsMap = createArgumentsMap(args);
+    public static void main(String[] args) {
+        try {
+            Map<String, String> argsMap = createArgumentsMap(args);
+            String dataFile = argsMap.get("--datasource");
+            String mintUrl = argsMap.get("--minturl");
+            String type = argsMap.get("--type");
+            Optional<String> fieldsUrl = Optional.ofNullable(argsMap.get("--fieldsurl"));
 
-        String dataFile = argsMap.get("--datasource");
-        String mintUrl = argsMap.get("--minturl");
-        String type = argsMap.get("--type");
-        Optional<String> fieldsUrl = Optional.ofNullable( argsMap.get("--fieldsurl") );
+            System.out.println(String.format("Loading to %s from %s", mintUrl, dataFile));
 
-        System.out.println(String.format("Loading to %s from %s", mintUrl, dataFile));
+            DataFileReader dataFileReader = new DataFileReader(dataFile, type, fieldsUrl);
 
-        DataFileReader dataFileReader = new DataFileReader(dataFile, type, fieldsUrl);
+            new Loader(mintUrl).load(dataFileReader.getFileEntriesIterator());
 
-        new Loader(mintUrl).load(dataFileReader.getFileEntriesIterator());
-
-        System.out.println("Loading complete");
+            System.out.println("Loading complete");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
