@@ -39,6 +39,10 @@ class Loader {
         for (List<Map> entryBatch : entryBatches) {
             send(entryBatch);
         }
+
+        if (entryCount == 0L){
+            System.out.println("Warning: no entries loaded. Check data source is not empty and includes headers if tsv.");
+        }
     }
 
     private void send(List<Map> batch) throws IOException {

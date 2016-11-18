@@ -100,10 +100,19 @@ public class DataFileReader {
             String header = reader.readLine();
 
             Arrays.stream(header.split(valueOf(separator))).map(String::trim).forEach(field -> {
-                if ("n".equals(cardinalities.get().get(field))) {
-                    builder.addArrayColumn(field);
-                } else {
-                    builder.addColumn(field);
+                String columnHeader = cardinalities.get().get(field);
+                if (columnHeader == null){
+                    throw new RuntimeException("Column header did not match any field name. Are the headers missing?");
+                }
+                switch (columnHeader) {
+                    case "n":
+                        builder.addArrayColumn(field);
+                        break;
+                    case "1":
+                        builder.addColumn(field);
+                        break;
+                    default:
+                        throw new RuntimeException("Heading did not match valid cardinality.");
                 }
             });
 
